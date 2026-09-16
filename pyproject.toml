@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ytvg"
+version = "0.1.0"
+description = "Semi-automated YouTube video generator controlled via Telegram approval gateways"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "aiogram>=3.15.0",
+  "celery[redis]>=5.4.0",
+  "redis>=5.2.0",
+  "motor>=3.6.0",
+  "pymongo>=4.9.0",
+  "pydantic>=2.9.0",
+  "pydantic-settings>=2.7.0",
+  "python-dotenv>=1.0.1",
+  "httpx>=0.28.0",
+  "edge-tts>=7.0.0",
+  "ffmpeg-python>=0.2.0",
+  "orjson>=3.10.0",
+  "structlog>=24.4.0",
+  "tenacity>=9.0.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3.0", "pytest-asyncio>=0.25.0", "ruff>=0.8.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
