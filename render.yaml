@@ -22,11 +22,11 @@ services:
       - key: GEMINI_API_KEY
         sync: false
       - key: GEMINI_MODEL
-        value: gemini-flash-latest
+        value: gemini-2.5-flash
       - key: POLLINATIONS_API_KEY
         sync: false
       - key: POLLINATIONS_IMAGE_MODEL
-        value: nanobanana-2
+        value: flux
       - key: IMAGE_FALLBACK_MODEL
         value: qwen-image-3
       - key: IMAGE_TIMEOUT_SEC

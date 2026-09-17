@@ -26,10 +26,10 @@ class Settings(BaseSettings):
     celery_result_backend: str = "redis://localhost:6379/2"
 
     gemini_api_key: str = ""
-    gemini_model: str = "gemini-flash-latest"
+    gemini_model: str = "gemini-2.5-flash"
 
     pollinations_api_key: str = ""
-    pollinations_image_model: str = "nanobanana-2"
+    pollinations_image_model: str = "flux"
     image_fallback_model: str = "qwen-image-3"
     image_timeout_sec: float = 90.0
 
