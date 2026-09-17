@@ -5,6 +5,7 @@ Run with: python -m src.main
 """
 import asyncio
 
+from src.celery_app.celery import celery_app  # noqa: F401 — must import before any .delay() calls
 from src.bot.handlers import main_router
 from src.bot.loader import bot, dp
 from src.database.connection import ensure_indexes
