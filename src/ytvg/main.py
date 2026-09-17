@@ -2,12 +2,30 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
+from aiohttp import web # أضفنا هذه المكتبة
 
 from ytvg.config import get_settings
 from ytvg.infrastructure.db.mongo import Mongo
 from ytvg.logging import setup_logging
 from ytvg.presentation.bot import build_runtime
 
+# --- دالة لإنشاء سيرفر وهمي للرد على Render ---
+async def health_check(request):
+    return web.Response(text="Bot is running successfully!")
+
+async def start_dummy_server():
+    app = web.Application()
+    app.router.add_get('/', health_check)
+    runner = web.AppRunner(app)
+    await runner.setup()
+    
+    # Render يحدد البورت تلقائياً عبر متغير البيئة PORT
+    port = int(os.environ.get("PORT", 8080))
+    site = web.TCPSite(runner, '0.0.0.0', port)
+    await site.start()
+    logging.info(f"Dummy web server started on port {port}")
+# -----------------------------------------------
 
 async def run() -> None:
     settings = get_settings()
@@ -21,6 +39,10 @@ async def run() -> None:
     bot, dp, listener, redis = build_runtime(settings, mongo)
 
     listener_task = asyncio.create_task(listener.run(), name="bot-event-listener")
+    
+    # تشغيل السيرفر الوهمي قبل بدء البوت
+    await start_dummy_server()
+
     logger.info("Bot polling started")
     try:
         await dp.start_polling(bot)
@@ -30,10 +52,8 @@ async def run() -> None:
         await redis.aclose()
         await mongo.close()
 
-
 def main() -> None:
     asyncio.run(run())
-
 
 if __name__ == "__main__":
     main()

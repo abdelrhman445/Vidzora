@@ -16,3 +16,4 @@ python-json-logger==3.2.1
 pytest==8.3.4
 pytest-asyncio==0.25.0
 ruff==0.8.4
+aiohttp
