@@ -1,3 +1,12 @@
+# Container-based Heroku deploy (recommended — reuses the existing
+# Dockerfile, which already installs ffmpeg via apt-get). Enable with:
+#   heroku stack:set container -a <your-app-name>
 build:
   docker:
-    web: Dockerfile
+    bot: Dockerfile
+    worker: Dockerfile
+    beat: Dockerfile
+run:
+  bot: python -m src.main
+  worker: celery -A src.celery_app.celery worker --loglevel=info -Q video_pipeline --concurrency=2
+  beat: celery -A src.celery_app.celery beat --loglevel=info

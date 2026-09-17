@@ -1,42 +1,9 @@
-# Python
 __pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
+*.pyc
+.env
+temp/*/
+!temp/*/.gitkeep
 .venv/
 venv/
-env/
 *.egg-info/
-.eggs/
-dist/
-build/
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.coverage
-htmlcov/
-
-# Env & secrets
-.env
-.env.local
-*.pem
-
-# Runtime artifacts
-temp/
-data/
-*.mp4
-*.mp3
-*.wav
-*.png
-*.jpg
-!docs/**
-
-# IDE
-.idea/
-.vscode/
-*.swp
-
-# OS
 .DS_Store
-Thumbs.db

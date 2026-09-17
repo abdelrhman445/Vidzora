@@ -1,54 +1,48 @@
 services:
   redis:
     image: redis:7-alpine
-    ports:
-      - "6379:6379"
+    restart: unless-stopped
     volumes:
       - redis_data:/data
-    command: redis-server --appendonly yes
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
 
   mongo:
     image: mongo:7
-    ports:
-      - "27017:27017"
+    restart: unless-stopped
     volumes:
       - mongo_data:/data/db
-    healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   bot:
     build: .
-    command: python -m ytvg.main
+    command: python -m src.main
+    restart: unless-stopped
     env_file: .env
     depends_on:
-      redis:
-        condition: service_healthy
-      mongo:
-        condition: service_healthy
+      - redis
+      - mongo
     volumes:
       - ./temp:/app/temp
-    restart: unless-stopped
+      - ./assets:/app/assets
 
   worker:
     build: .
-    command: celery -A ytvg.celery_app.celery_app worker --loglevel=INFO -Q text,audio,images,video,maintenance --concurrency=2
+    command: celery -A src.celery_app.celery worker --loglevel=info -Q video_pipeline --concurrency=2
+    restart: unless-stopped
     env_file: .env
     depends_on:
-      redis:
-        condition: service_healthy
-      mongo:
-        condition: service_healthy
+      - redis
+      - mongo
     volumes:
       - ./temp:/app/temp
+      - ./assets:/app/assets
+
+  beat:
+    build: .
+    command: celery -A src.celery_app.celery beat --loglevel=info
     restart: unless-stopped
+    env_file: .env
+    depends_on:
+      - redis
+      - mongo
 
 volumes:
   redis_data:

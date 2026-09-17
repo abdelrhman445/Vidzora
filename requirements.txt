@@ -1,19 +1,29 @@
+# --- Telegram ---
 aiogram==3.15.0
-celery[redis]==5.4.0
-redis==5.2.1
+
+# --- Task queue ---
+celery==5.4.0
+redis==5.2.0
+
+# --- Database ---
 motor==3.6.0
-pymongo==4.9.2
+pymongo==4.10.1
+
+# --- Config / validation ---
 pydantic==2.9.2
-pydantic-settings==2.7.0
-python-dotenv==1.0.1
-httpx==0.28.1
-edge-tts>=7.2.1
+pydantic-settings==2.6.1
+
+# --- AI ---
+google-genai==0.7.0
+
+# --- TTS ---
+edge-tts==6.1.19
+mutagen==1.47.0
+
+# --- Video / rendering ---
+moviepy==2.1.2
 ffmpeg-python==0.2.0
-orjson==3.10.12
-structlog==24.4.0
-tenacity==9.0.0
-python-json-logger==3.2.1
-pytest==8.3.4
-pytest-asyncio==0.25.0
-ruff==0.8.4
-aiohttp
+Pillow==11.0.0
+
+# --- HTTP ---
+requests==2.32.3
