@@ -70,6 +70,29 @@ celery -A ytvg.celery_app.celery_app worker -l INFO -Q text,audio,images,video,m
 
 Or `docker compose up --build`.
 
+## Deploy on Render
+
+The bot process and the Celery worker **must run in the same container** — the
+worker writes audio/image/video files to `temp/<job_id>/` and the bot reads
+those same files from disk to send them on Telegram. `start.sh` runs both
+processes together (worker in the background, bot in the foreground), and the
+`Dockerfile` uses it as the entrypoint.
+
+1. Provision MongoDB (e.g. MongoDB Atlas free tier) and Redis (e.g. Render Key
+   Value or Upstash) and grab their connection strings.
+2. On Render: **New → Blueprint**, point it at this repo (it will read
+   `render.yaml`) — or **New → Web Service** with the Docker environment if
+   you'd rather set it up by hand.
+3. Fill in the environment variables it asks for (`TELEGRAM_BOT_TOKEN`,
+   `MONGODB_URI`, `REDIS_URL`, `CELERY_BROKER_URL`, `CELERY_RESULT_BACKEND`,
+   `GEMINI_API_KEY`, `POLLINATIONS_API_KEY`, ...).
+4. Keep the instance count at **1** — running multiple replicas would split
+   jobs across containers that don't share a disk, breaking the
+   worker→bot handoff described above.
+5. Deploy. Render sets `PORT` automatically; `main.py`'s dummy `aiohttp`
+   server binds to it so Render's health check passes while `dp.start_polling`
+   handles the actual Telegram traffic.
+
 ## Temp files
 
 `TempWorkspaceManager` isolates every job under `TEMP_DIR/<job_id>/`. `cleanup_job` runs after success, cancel, and (via Celery beat) for workspaces older than `TEMP_TTL_HOURS`. Path traversal in `job_id` is rejected.

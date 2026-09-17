@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: vidzora-bot
+    runtime: docker
+    plan: starter
+    numInstances: 1
+    envVars:
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_ADMIN_IDS
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: MONGODB_DB_NAME
+        value: ytvg
+      - key: REDIS_URL
+        sync: false
+      - key: CELERY_BROKER_URL
+        sync: false
+      - key: CELERY_RESULT_BACKEND
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.0-flash
+      - key: POLLINATIONS_API_KEY
+        sync: false
+      - key: POLLINATIONS_IMAGE_MODEL
+        value: nanobanana-2
+      - key: IMAGE_FALLBACK_MODEL
+        value: qwen-image-3
+      - key: IMAGE_TIMEOUT_SEC
+        value: "90"
