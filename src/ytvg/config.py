@@ -39,10 +39,10 @@ class Settings(BaseSettings):
     temp_dir: Path = Path("./temp")
     temp_ttl_hours: int = 24
 
-    video_width: int = 1080
-    video_height: int = 1920
-    video_fps: int = 30
-    video_bitrate: str = "4M"
+    video_width: int = 720
+    video_height: int = 1280
+    video_fps: int = 24
+    video_bitrate: str = "2500k"
 
     log_level: str = "INFO"
     bot_event_channel: str = "ytvg:bot:events"

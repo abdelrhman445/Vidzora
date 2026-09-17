@@ -61,6 +61,8 @@ class FFmpegVideoRenderer:
             r=s.video_fps,
             s=f"{s.video_width}x{s.video_height}",
             video_bitrate=s.video_bitrate,
+            preset="veryfast",
+            threads=1,
             movflags="faststart",
         )
         ffmpeg.run(stream, overwrite_output=True, quiet=True)
