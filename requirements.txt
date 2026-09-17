@@ -7,7 +7,7 @@ redis==5.2.0
 
 # --- Database ---
 motor==3.6.0
-pymongo==4.10.1
+pymongo==4.9.2
 
 # --- Config / validation ---
 pydantic==2.9.2
@@ -23,7 +23,8 @@ mutagen==1.47.0
 # --- Video / rendering ---
 moviepy==2.1.2
 ffmpeg-python==0.2.0
-Pillow==11.0.0
+# Pillow version is left unpinned — moviepy pulls in whichever version it's
+# compatible with; pinning it here previously caused a resolver conflict.
 
 # --- HTTP ---
 requests==2.32.3
