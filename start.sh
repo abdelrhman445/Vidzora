@@ -6,7 +6,7 @@ set -e
 celery -A ytvg.celery_app.celery_app worker \
     --loglevel=INFO \
     -Q text,audio,images,video,maintenance \
-    --concurrency=2 &
+    --concurrency=1 &
 
 # Run the Telegram bot (and Render's dummy health-check server) in the
 # foreground. If this exits, the container stops.
