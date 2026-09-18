@@ -14,7 +14,8 @@ import requests
 from src.config.settings import settings
 from src.utils.logger import logger
 
-_HF_URL_TMPL = "https://api-inference.huggingface.co/models/{model}"
+_HF_URL_TMPL = "https://router.huggingface.co/hf-inference/models/{model}"
+_POLLINATIONS_URL_TMPL = "https://gen.pollinations.ai/image/{prompt}"
 
 
 def _generate_huggingface(prompt: str, out_path: Path) -> None:
@@ -35,6 +36,25 @@ def _generate_huggingface(prompt: str, out_path: Path) -> None:
         resp.raise_for_status()
 
     raise RuntimeError(f"Hugging Face image generation failed after retries for prompt: {prompt!r}")
+
+
+def _generate_pollinations(prompt: str, out_path: Path) -> None:
+    import urllib.parse
+
+    url = _POLLINATIONS_URL_TMPL.format(prompt=urllib.parse.quote(prompt))
+    headers = {"Authorization": f"Bearer {settings.POLLINATIONS_API_KEY}"}
+    params = {
+        "model": settings.POLLINATIONS_IMAGE_MODEL,
+        "width": settings.VIDEO_WIDTH,
+        "height": settings.VIDEO_HEIGHT,
+        "nologo": "true",
+    }
+
+    resp = requests.get(url, headers=headers, params=params, timeout=120)
+    if resp.status_code == 200:
+        out_path.write_bytes(resp.content)
+        return
+    resp.raise_for_status()
 
 
 def _generate_leonardo(prompt: str, out_path: Path) -> None:
@@ -79,5 +99,7 @@ def _generate_leonardo(prompt: str, out_path: Path) -> None:
 def generate_image(prompt: str, out_path: Path) -> None:
     if settings.IMAGE_PROVIDER == "leonardo":
         _generate_leonardo(prompt, out_path)
+    elif settings.IMAGE_PROVIDER == "pollinations":
+        _generate_pollinations(prompt, out_path)
     else:
         _generate_huggingface(prompt, out_path)

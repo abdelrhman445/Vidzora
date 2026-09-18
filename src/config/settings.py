@@ -34,11 +34,13 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str = Field(..., description="Google Gemini API key")
     GEMINI_MODEL: str = Field(default="gemini-2.5-flash")
 
-    IMAGE_PROVIDER: str = Field(default="huggingface", description="'huggingface' or 'leonardo'")
+    IMAGE_PROVIDER: str = Field(default="pollinations", description="'huggingface', 'leonardo', or 'pollinations'")
     HUGGINGFACE_API_KEY: str = Field(default="")
     HUGGINGFACE_IMAGE_MODEL: str = Field(default="stabilityai/stable-diffusion-xl-base-1.0")
     LEONARDO_API_KEY: str = Field(default="")
     LEONARDO_MODEL_ID: str = Field(default="")
+    POLLINATIONS_API_KEY: str = Field(default="")
+    POLLINATIONS_IMAGE_MODEL: str = Field(default="flux")
 
     # --- TTS ---
     TTS_VOICE: str = Field(default="en-US-GuyNeural")
