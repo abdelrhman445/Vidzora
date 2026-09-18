@@ -11,11 +11,10 @@ from src.config.settings import settings
 
 
 def build_caption_clip(text: str, duration: float, video_w: int, video_h: int):
-    font_kwargs = {"font": settings.SUBTITLE_FONT_PATH} if settings.SUBTITLE_FONT_PATH else {}
-
     text_clip = (
         TextClip(
             text=text,
+            font=settings.resolved_font_path,
             font_size=settings.SUBTITLE_FONT_SIZE,
             color="white",
             stroke_color="black",
@@ -23,7 +22,6 @@ def build_caption_clip(text: str, duration: float, video_w: int, video_h: int):
             size=(int(video_w * 0.88), None),
             method="caption",
             text_align="center",
-            **font_kwargs,
         )
         .with_duration(duration)
     )

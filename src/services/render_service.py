@@ -87,6 +87,7 @@ def _title_card(text: str, duration: float):
     title = (
         TextClip(
             text=text,
+            font=settings.resolved_font_path,
             font_size=int(_SIZE[0] * 0.09),
             color="white",
             size=(int(_SIZE[0] * 0.85), None),

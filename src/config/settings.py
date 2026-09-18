@@ -81,6 +81,18 @@ class Settings(BaseSettings):
     def admin_ids(self) -> set[int]:
         return {int(x) for x in self.ADMIN_USER_IDS.split(",") if x.strip()}
 
+    @property
+    def resolved_font_path(self) -> str:
+        """SUBTITLE_FONT_PATH if set, else the bundled font-roboto Bold ttf.
+        MoviePy 2.x's TextClip requires an explicit font — there is no
+        built-in default anymore — so this guarantees one is always available.
+        """
+        if self.SUBTITLE_FONT_PATH:
+            return self.SUBTITLE_FONT_PATH
+        import font_roboto
+
+        return font_roboto.RobotoBold
+
 
 @lru_cache
 def get_settings() -> Settings:
